@@ -21,19 +21,21 @@ namespace sql_generater
     /// </summary>
     public partial class MainWindow : Window
     {
-        private string prevDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-
-        public MyProperty Pt { get; set; }
+        private MyProperty Pt { get; set; }
 
         public MainWindow()
         {
             InitializeComponent();
 
+            Pt = new MyProperty();
             this.DataContext = Pt;
         }
 
         private void BtnDialog_Click(object sender, RoutedEventArgs e)
         {
+            var prevDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            if (Pt.LogFile != null) prevDirectory = Pt.LogFile.DirectoryName;
+
             var dialog = new OpenFileDialog()
             {
                 FileName = string.Empty,
@@ -43,18 +45,14 @@ namespace sql_generater
 
             if (dialog.ShowDialog() == true)
             {
-                var fi = new FileInfo(dialog.FileName);
-                if (fi.Exists)
+                Pt.LogFile = new FileInfo(dialog.FileName);
+                if (Pt.LogFile.Exists)
                 {
-                    prevDirectory = fi.DirectoryName;
-                    this.LogFile.Text = fi.FullName;
-
-                    ShowLog(fi);
+                    ShowLog();
                 }
                 else
                 {
-                    this.ProcessMsg.Text = "ファイルが見つかりません。";
-                    this.ProcessMsg.Foreground = new SolidColorBrush(Colors.Red);
+                    Pt.ProcessMsg = "ファイルが見つかりません。";
                 }
             }
         }
@@ -64,11 +62,11 @@ namespace sql_generater
 
         }
 
-        private void ShowLog(FileInfo fi)
+        private void ShowLog()
         {
-            using (var st = fi.OpenText())
+            using (var st = Pt.LogFile.OpenText())
             {
-                this.AnalyzedLog.Text = st.ReadToEnd();
+                Pt.AnalyzedLog = st.ReadToEnd();
             }
         }
     }

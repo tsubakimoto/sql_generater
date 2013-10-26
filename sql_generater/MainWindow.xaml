@@ -4,10 +4,6 @@
         xmlns:local="clr-namespace:sql_generater"
         Title="MainWindow" Height="500" Width="600">
 
-    <!--<Window.DataContext>
-        <local:MyProperty/>
-    </Window.DataContext>-->
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -24,7 +20,7 @@
         </Grid.Resources>
 
         <StackPanel Grid.Row="0">
-            <TextBox x:Name="LogFile" IsReadOnly="True" Text="ログファイル" Width="450">
+            <TextBox IsReadOnly="True" Text="{Binding Path=LogFile.FullName, Mode=OneWay}" Width="450">
                 <TextBox.Resources>
                     <Style TargetType="TextBox">
                         <Setter Property="Background" Value="#eee" />
@@ -36,12 +32,12 @@
         </StackPanel>
 
         <StackPanel Grid.Row="1">
-            <TextBlock x:Name="ProcessMsg" />
+            <TextBlock Text="{Binding Path=ProcessMsg, Mode=OneWay}" />
         </StackPanel>
 
         <StackPanel Grid.Row="2">
             <ScrollViewer HorizontalScrollBarVisibility="Visible" Width="565">
-                <TextBlock x:Name="AnalyzedLog" />
+                <TextBlock Text="{Binding Path=AnalyzedLog, Mode=OneWay}" />
             </ScrollViewer>
         </StackPanel>
     </Grid>

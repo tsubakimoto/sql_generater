@@ -1,37 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
+﻿using System.IO;
 
 namespace sql_generater
 {
-    public class MyProperty : INotifyPropertyChanged
+    class MyProperty : NotifyPropertyBase
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public void NotifyPropertyChanged(string propertyName = "")
+        private FileInfo logFile;
+        public FileInfo LogFile
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
-
-#if false
-        private string _Message = string.Empty;
-        public string Message
-        {
-            get { return this._Message; }
+            get { return this.logFile; }
             set
             {
-                if (value != this._Message)
-                {
-                    this._Message = value;
-                    NotifyPropertyChanged("Message");
-                }
+                this.logFile = value;
+                OnPropertyChanged("LogFile");
             }
         }
-#endif
+
+        private string analyzedLog;
+        public string AnalyzedLog
+        {
+            get { return this.analyzedLog; }
+            set
+            {
+                this.analyzedLog = value;
+                OnPropertyChanged("AnalyzedLog");
+            }
+        }
+
+        private string processMsg;
+        public string ProcessMsg
+        {
+            get { return this.processMsg; }
+            set
+            {
+                this.processMsg = value;
+                OnPropertyChanged("ProcessMsg");
+            }
+        }
     }
 }
