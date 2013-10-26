@@ -59,7 +59,10 @@ namespace sql_generater
 
         private void BtnGenerate_Click(object sender, RoutedEventArgs e)
         {
-
+            var sqlList = GetSqlList();
+            var inserts = from sql in sqlList where sql.ToLower().StartsWith("insert") select sql;
+            var updates = from sql in sqlList where sql.ToLower().StartsWith("update") select sql;
+            var deletes = from sql in sqlList where sql.ToLower().StartsWith("delete") select sql;
         }
 
         private void ShowLog()
@@ -68,6 +71,17 @@ namespace sql_generater
             {
                 Pt.AnalyzedLog = st.ReadToEnd();
             }
+        }
+
+        private IEnumerable<string> GetSqlList()
+        {
+            // ログ先頭の日時、処理種別、DB種別を除外する（今は無理やり）
+            return from log in GetLogCollection() select log.Remove(0, 43);
+        }
+
+        private List<string> GetLogCollection()
+        {
+            return Pt.AnalyzedLog.Split('\n').ToList();
         }
     }
 }

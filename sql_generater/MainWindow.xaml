@@ -37,7 +37,7 @@
 
         <StackPanel Grid.Row="2">
             <ScrollViewer HorizontalScrollBarVisibility="Visible" Width="565">
-                <TextBlock Text="{Binding Path=AnalyzedLog, Mode=OneWay}" />
+                <TextBlock Text="{Binding Path=AnalyzedLog, Mode=OneWay}" FontFamily="MS Gothic" />
             </ScrollViewer>
         </StackPanel>
     </Grid>
