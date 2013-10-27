@@ -63,13 +63,37 @@ namespace sql_generater
             var inserts = from sql in sqlList where sql.ToLower().StartsWith("insert") select sql;
             var updates = from sql in sqlList where sql.ToLower().StartsWith("update") select sql;
             var deletes = from sql in sqlList where sql.ToLower().StartsWith("delete") select sql;
+
+            var commands = new List<Command>();
+
+            // insert
+            inserts.ToList().ForEach(insert =>
+            {
+                var command = new Command()
+                {
+                    Table = insert.Split(' ')[2],
+                    Conditions = new List<Condition>()
+                };
+
+                GetInsertFields(insert).ForEach(c =>
+                {
+                    command.Conditions.Add(new Condition() { Field = c });
+                });
+
+                commands.Add(command);
+            });
+
+            // update
+
+
+            // delete
         }
 
         private void ShowLog()
         {
             using (var st = Pt.LogFile.OpenText())
             {
-                Pt.AnalyzedLog = st.ReadToEnd();
+                Pt.AnalyzedLog = st.ReadToEnd().Replace("(", " (").Replace(")", ") ").Replace("  (", " (").Replace(")  ", ") ");
             }
         }
 
@@ -82,6 +106,16 @@ namespace sql_generater
         private List<string> GetLogCollection()
         {
             return Pt.AnalyzedLog.Split('\n').ToList();
+        }
+
+        private static List<string> GetInsertFields(string insert)
+        {
+            return insert.Split('(')[1].Split(')')[0].Split(',').ToList();
+        }
+
+        private static List<string> GetInsertValues(string insert)
+        {
+            return insert.Split('(')[1].Split(')')[0].Split(',').ToList();
         }
     }
 }
